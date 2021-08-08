@@ -4,44 +4,113 @@
 
 ## How To Use
 
-Just like `useState`。`counter` is your state. `setCounter` is a setter.
-
-`setCounter` receive a value or callback.
+### Define a store
 
 ```typescript
-import { useStore } from "canglin"
+// store.ts
 
-const [counter, setCounter] = useStore("counter", { count: 0 })
+import { defineStore, StoreKey } from "canglin"
 
-setCounter(counter => counter.count++) // or secCounter(1)
+interface UserState {
+  name: string;
+  hobby: string[]
+}
+export const USER: StoreKey<UserState> = Symbol()
 
+export const store = defineStore(USER, {
+  name: 'fzxen',
+  hobby: ['basketball', 'football']
+})
 ```
 
-`useStore` will register state in Global Store when called first. if `useStore` is called again, it will return last store data and ignore the second parameter.
+### Usage in hook
 
-```typescript
+```tsx
+// hook component
+import React from "react"
 import { useStore } from "canglin"
+import { USER } from "./store"
 
-const [state1] = useStore("user", { name: 'Kevin'})
-const [state2] = useStore("user")
+function useUser() {
+  const [user, setUser] = useStore(USER)
+  
+  function updateName(name: string) {
+    setUser(name)
+  }
 
-state === state2 // true
+  function updateHobby(hobby: string) {
+    setUser(user => {
+      // you can mutate state directly
+      user.hobby.push(hobby)
+    })
+  }
+
+  return {
+    name: state.name,
+    hobby: state.hobby,
+
+    updateName,
+    updateHobby
+  }
+}
+
+function Profile() {
+  const { name, updateName } = useUser()
+
+  function onInputChange(e) {
+    updateName(e.target.value)
+  }
+
+  return 
+    <div>
+      <p>{name}</p>
+      <input onChange={onInputChange}/>
+    </div>
+}
+
+export default Profile
 ```
 
-we can mutate fully store with `mutate` instead of state setter.
+### Usage in class component
 
-```typescript
+```tsx
+import React from "react"
+import { connect } from "canglin"
+import { USER } from "./types"
 
-// a.js
-import { useStore } from "canglin"
+class Profile extends React.Component {
+  render() {
+    return 
+      <div>
+        <p>{name}</p>
+        <input onChange={onInputChange}/>
+      </div>
+  }
+}
 
-const [user, setUser] = useStore("user", { name: 'Kevin'})
+const connector = connect(USER, (user, setUser) => {
+  function updateName(name: string) {
+    setUser(name)
+  }
 
+  function updateHobby(hobby: string) {
+    setUser(user => {
+      // you can mutate state directly
+      user.hobby.push(hobby)
+    })
+  }
 
-// b.js
-import { useStore } from "canglin"
+  // return value will merge into component props
+  return {
+    name: state.name,
+    hobby: state.hobby,
 
-mutate("user", { name: "Peter" })
+    updateName,
+    updateHobby
+  }
+})
+
+export default connector(Profile)
 ```
 
 ## API

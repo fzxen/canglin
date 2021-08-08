@@ -1,7 +1,12 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import { mutate, useStore } from "../src";
+import { mutate, useStore, StoreKey } from "../src";
 
 describe("mutate", () => {
+  const USER: StoreKey<{
+    name: string;
+    age: number;
+  }> = Symbol();
+
   test("mutate data", () => {
     const data = {
       name: "zxfan",
@@ -10,14 +15,14 @@ describe("mutate", () => {
     };
 
     const { result } = renderHook(() =>
-      useStore("user", {
+      useStore(USER, {
         name: "zzzzz",
         age: 20000,
       })
     );
 
     act(() => {
-      mutate("user", data);
+      mutate(USER, data);
     });
 
     const [state] = result.current;
