@@ -112,10 +112,3 @@ const connector = connect(USER, (user, setUser) => {
 
 export default connector(Profile)
 ```
-
-## API
-
-`canglin` only have two API
-
-- useStore: `function useStore<T>(key: KeyType, initVal?: T | undefined): [T, Dispatch<T>]`
-- mutate: `function mutate(key: KeyType, value: unknown): void`
