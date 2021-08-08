@@ -116,3 +116,54 @@ const connector = connect(USER, (user, setUser) => {
 
 export default connector(Profile);
 ```
+
+## API
+
+1.`defineStore`: Define a store. Then return a store object
+
+```typescript
+function defineStore<T>(state: T): {
+  key: StoreKey<T>;
+  mutate: (state: T) => void;
+}
+```
+
+- `store.key`: The identifier of store. You can get state by `useStore` which regard key as the first parameter
+- `store.mutate`: mutate all state object.
+
+<hr/>
+
+2.`useStore`: The getter of store state.
+
+```typescript
+function useStore<T>(key: KeyType<T>, defaultValue?: T | undefined): [T, Setter<T>]
+```
+parameters:
+
+- `key`: The key of store. It returned by `defineStore`. or you can define a store key like this:
+
+```typescript
+import { StoreKey } from "canglin"
+
+const USER: StoreKey<{ name: string }> = Symbol()
+```
+
+- `defaultValue`: If you don't define store before useStore and provide defaultValue. It will do defineStore automatically.
+
+return value:
+
+- `state`: store state that you defined.
+- `setter`: pass a state object or function to setter. you can mutate the state object directly because canglin support [immerjs](https://immerjs.github.io/immer/)
+
+<hr/>
+
+3.`connect`: You can map state to component props. It is useful for class component.
+
+```typescript
+function connect<T, K extends object>(key: KeyType<T>, mapStoreToProps: (state: T, setState: Setter<T>) => K): <S extends K>(Comp: React.ComponentType<S>) => React.FC<Omit<S, keyof K>>
+```
+
+parameters:
+
+- `key`: same as above.
+- `mapStoreToProps`: It is a function. its two parameters is equally to return value of useStore.

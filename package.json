@@ -17,9 +17,9 @@
     "type": "git",
     "url": "git+https://github.com/fzxen/canglin.git"
   },
-  "keywords": [],
+  "keywords": ["react", "state management"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fzxen/canglin/issues"
   },
