@@ -1,6 +1,6 @@
 {
   "name": "canglin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "仓廪",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/fzxen/canglin#readme",
   "devDependencies": {
+    "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.1",
     "@types/jest": "^26.0.24",
     "@types/react": "^17.0.16",

@@ -1,7 +1,17 @@
 import store from "./store";
 import { StoreKey } from "./types";
 
-export function defineStore<T>(key: StoreKey<T>, state: T) {
-  if (store.has(key)) return;
-  store.set(key, state);
+export function defineStore<T>(state: T) {
+  const key: StoreKey<T> = Symbol();
+
+  function mutate(state: T) {
+    store.set(key, state);
+  }
+
+  mutate(state);
+
+  return {
+    key,
+    mutate,
+  };
 }

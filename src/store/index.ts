@@ -22,8 +22,4 @@ function createStore() {
 
 const store = createStore();
 
-export function mutate<T>(key: KeyType<T>, value: T) {
-  store.set(key, value);
-}
-
 export default store;

@@ -9,14 +9,13 @@ export function connect<T, K extends object>(
   return function connector<S extends K>(Comp: React.ComponentType<S>) {
     const Wrapper: React.FC<Omit<S, keyof K>> = function (props) {
       const [state, setState] = useStore(key);
+
       const storeProps = useMemo(
-        () => ({ ...mapStoreToProps(state, setState) }),
-        [state, setState]
-      );
+        () => ({ ...mapStoreToProps(state, setState), ...props }),
+        [state, setState, props]
+      ) as S;
 
-      const compProps = Object.assign({}, props, storeProps) as S;
-
-      return <Comp {...compProps} />;
+      return <Comp {...storeProps} />;
     };
 
     return Wrapper;
